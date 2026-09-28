@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unity & JavaScript</title>
+    <!-- CSSを記載しないと画面が無限に描画されてしまう -->
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background: #2c3e50;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin: 0 0 20px 0;
+        }
+
+        #unity-canvas {
+            width: 800px;
+            height: 600px;
+            background: #000;
+            border-radius: 5px;
+            display: block;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 15px 40px;
+            font-size: 18px;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            color: white;
+            transition: transform 0.1s;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        .red { background: #e74c3c; }
+        .green { background: #2ecc71; }
+        .blue { background: #3498db; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Unity & JavaScript</h1>
+        <!-- この中に3D映像を描画 -->
+        <canvas id="unity-canvas"></canvas>
+        <div class="buttons">
+            <button class="red" onclick="changeColor('red')">赤</button>
+            <button class="green" onclick="changeColor('green')">緑</button>
+            <button class="blue" onclick="changeColor('blue')">青</button>
+        </div>
+        <!-- メッセージ表示エリア-->
+        <div id="message-area"></div>
+        <!-- スライダー -->
+        <input 
+            type="range" 
+            id="size-slider" 
+            min="0.5" 
+            max="3" 
+            step="0.1" 
+            value="1" 
+            oninput="changeSize(this.value)"
+        >
+        <!-- カラーピッカー -->
+        <input
+            type="color"
+            id="color-picker"
+            value="#ffffff"
+            oninput="changeColorByPicker(this.value)"
+        >
+
+    </div>
+    <!-- Unity Loaderの読み込み -->
+    <script src="WEBGLBuild/Build/WEBGLBuild.loader.js"></script>
+    <script>
+        // WebGLのインスタンスを格納する変数
+        let unityInstance = null;
+
+        // WebGLを使用する準備を行う
+        // Unity画面の描画位置を決める
+        createUnityInstance(
+            // 描画位置
+            document.querySelector("#unity-canvas"), 
+            // 描画に必要な設定
+            {
+                // data(3Dモデルなどアセット)
+                dataUrl: "WEBGLBuild/Build/WEBGLBuild.data", 
+                // faramework(jslibなどでビルドされたもの)
+                frameworkUrl: "WEBGLBuild/Build/WEBGLBuild.framework.js",
+                // wasm(コンパイルされたもの)
+                codeUrl: "WEBGLBuild/Build/WEBGLBuild.wasm" 
+            }
+        ).then((instance) => {
+            unityInstance = instance;
+            console.log("Unityインスタンス設定完了")
+        }).catch((e) => {
+            console.log("インスタンス設定エラー")
+        });
+
+        // Unity側のSphereの色を変更
+        function changeColor(color){
+            if(unityInstance){
+                unityInstance.SendMessage(
+                    // 対象のGameObject
+                    "Sphere", 
+                    // 対象のC#側関数
+                    "ChangeColor", 
+                    // 渡す値
+                    color
+                );
+            }
+        }
+
+        // messageを表示する関数
+        function ReceiveMessageFromUnity(message){
+            document.getElementById("message-area").textContent = message;
+        }
+
+        // サイズ変更
+        function changeSize(sizeValue){
+            if(unityInstance){
+                unityInstance.SendMessage(
+                    "Sphere", 
+                    "ChangeSize", 
+                    sizeValue
+                )
+            }
+        }
+
+        // カラーピッカーの値でUnityのSphereを変更
+        function changeColorByPicker(colorCode){
+            if (unityInstance) {
+                unityInstance.SendMessage(
+                "Sphere",
+                "ChangeColorByPicker",
+                colorCode
+                );
+            }
+        }
+    </script>
+</body>
+</html>
+

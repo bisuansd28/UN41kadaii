@@ -1,0 +1,62 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    height: 100vh;
+    background: #22384d;
+    padding: 3vw;
+    font-family: sans-serif;
+}
+
+.container {
+    height: calc(100vh - 6vw);
+    display: flex;
+    flex-direction: column;
+}
+
+/* 上のゲーム画面 */
+.game-area {
+    flex: 1;
+    background: #efefef;
+    border-radius: 10px;
+    margin-bottom: 3vw;
+    overflow: hidden;
+}
+
+/* 下のボタン群 */
+.bottom-area {
+    display: flex;
+    gap: 3vw;
+    height: 12vh;
+    min-height: 60px;
+    max-height: 90px;
+}
+
+.box {
+    flex: 1;
+    border: none;
+    border-radius: 8px;
+    font-size: clamp(16px, 3vw, 28px);
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.coin-box {
+    background: white;
+}
+
+.button-box {
+    background: #3fa9f5;
+    color: white;
+    cursor: pointer;
+}
+
+#unity-canvas {
+    width: 100%;
+    height: 100%;
+}

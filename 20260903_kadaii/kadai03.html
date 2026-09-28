@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8">
+        <title>コイン集め</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+
+        <div class="container">
+
+            <!-- 上の大きい四角 -->
+            <div id="unity-container" class="game-area">
+                <canvas id="unity-canvas"></canvas>
+            </div>
+
+            <!-- 下の2つの四角 -->
+            <div class="bottom-area">
+                <div class="box coin-box">
+                    <div id="message-area">コイン: 0枚</div>
+                </div>
+
+                <button class="box button-box" onclick="CoinRespawn()">
+                    コインを再生成
+                </button>
+            </div>
+
+        </div>
+        <script src="WEBGLBuild/Build/WEBGLBuild.loader.js"></script>
+        <script src="scripts.js"></script>
+    </body>
+</html>
