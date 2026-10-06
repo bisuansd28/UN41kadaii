@@ -48,8 +48,8 @@ public class CharactorMove : MonoBehaviour
         // XとZが-4～4を超えないようにする
         Vector3 pos = transform.position;
 
-        pos.x = Mathf.Clamp(pos.x, -4f, 4f);
-        pos.z = Mathf.Clamp(pos.z, -4f, 4f);
+        pos.x = Mathf.Clamp(pos.x, -3.5f, 3.5f);
+        pos.z = Mathf.Clamp(pos.z, -3.5f, 3.5f);
 
         transform.position = pos;
     }
