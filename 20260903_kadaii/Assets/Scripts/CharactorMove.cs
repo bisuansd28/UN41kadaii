@@ -6,7 +6,7 @@ public class CharactorMove : MonoBehaviour
 {
     // 移動速度
     public float moveSpeed = 5f;
-    private Vector2 touchDirection = Vector2.zero;
+    public Vector2 touchDirection = Vector2.zero;
 
     // Start is called before the first frame update
     void Start()

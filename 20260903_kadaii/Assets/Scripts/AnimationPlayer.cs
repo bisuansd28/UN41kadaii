@@ -4,66 +4,85 @@ using UnityEngine;
 
 public class AnimationPlayer : MonoBehaviour
 {
-    // アニメーションファイルを格納する変数
     // 待機モーション
-   public AnimationClip idleAnimationClip;
-   // 走りモーション
-   public AnimationClip runAnimation;
-   // ジャンプモーション
-   public AnimationClip jumpAnimation;
+    public AnimationClip idleAnimationClip;
 
-   // ジャンプ中か管理するフラグ
+    // 走りモーション
+    public AnimationClip runAnimation;
+
+    // ジャンプモーション
+    public AnimationClip jumpAnimation;
+
+    // ジャンプ中か
     public bool isJumping = false;
 
-   // アニメーションコンポーネントを格納する変数
-   private Animation animationComponent;
+    // Animationコンポーネント
+    private Animation animationComponent;
 
-   public Vector2 touchDirection = Vector2.zero;
+    // 移動スクリプト
+    private CharactorMove charactorMove;
 
-    // Start is called before the first frame update
     void Start()
     {
         animationComponent = GetComponent<Animation>();
-        if(animationComponent == null)
+
+        if (animationComponent == null)
         {
-            // アニメーションコンポーネントがなければ新しくつける
             animationComponent = gameObject.AddComponent<Animation>();
         }
 
-        // アニメーションを登録
+        charactorMove = GetComponent<CharactorMove>();
+
+        // アニメーション登録
         animationComponent.AddClip(idleAnimationClip, "Idle");
         animationComponent.AddClip(runAnimation, "Run");
         animationComponent.AddClip(jumpAnimation, "Jump");
+
+        animationComponent.Play("Idle");
     }
 
-    // Update is called once per frame
     void Update()
     {
-        // ジャンプキーが押されたとき&ジャンプ状態でないとき
-        if(Input.GetKey(KeyCode.Space) && !isJumping)
+        // ジャンプ
+        if (Input.GetKeyDown(KeyCode.Space) && !isJumping)
         {
-            // ジャンプ状態
             isJumping = true;
-            // ジャンプモーション再生
             animationComponent.Play("Jump");
         }
 
-        // ジャンプ終了した場合
-        if(isJumping && !animationComponent.IsPlaying("Jump"))
+        // ジャンプ終了
+        if (isJumping && !animationComponent.IsPlaying("Jump"))
         {
             isJumping = false;
         }
 
         if (!isJumping)
         {
-            // WASDで走る
-            if(Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D) || touchDirection != Vector2.zero)
+            bool isMoving =
+                Input.GetKey(KeyCode.W) ||
+                Input.GetKey(KeyCode.A) ||
+                Input.GetKey(KeyCode.S) ||
+                Input.GetKey(KeyCode.D);
+
+            // タッチ移動判定
+            if (charactorMove != null)
             {
-                animationComponent.Play("Run");
-            } else
+                isMoving = isMoving || charactorMove.touchDirection != Vector2.zero;
+            }
+
+            if (isMoving)
             {
-                // アニメーションを再生
-                animationComponent.Play("Idle");
+                if (!animationComponent.IsPlaying("Run"))
+                {
+                    animationComponent.Play("Run");
+                }
+            }
+            else
+            {
+                if (!animationComponent.IsPlaying("Idle"))
+                {
+                    animationComponent.Play("Idle");
+                }
             }
         }
     }
