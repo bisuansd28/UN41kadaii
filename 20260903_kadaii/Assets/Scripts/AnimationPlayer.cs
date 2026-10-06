@@ -19,8 +19,8 @@ public class AnimationPlayer : MonoBehaviour
     // Animationコンポーネント
     private Animation animationComponent;
 
-    // 移動スクリプト
-    private CharactorMove charactorMove;
+    // 前フレームの位置
+    private Vector3 lastPosition;
 
     void Start()
     {
@@ -31,13 +31,15 @@ public class AnimationPlayer : MonoBehaviour
             animationComponent = gameObject.AddComponent<Animation>();
         }
 
-        charactorMove = GetComponent<CharactorMove>();
-
         // アニメーション登録
         animationComponent.AddClip(idleAnimationClip, "Idle");
         animationComponent.AddClip(runAnimation, "Run");
         animationComponent.AddClip(jumpAnimation, "Jump");
 
+        // 初期位置保存
+        lastPosition = transform.position;
+
+        // 待機モーション再生
         animationComponent.Play("Idle");
     }
 
@@ -56,19 +58,13 @@ public class AnimationPlayer : MonoBehaviour
             isJumping = false;
         }
 
+        // ジャンプ中でなければ移動判定
         if (!isJumping)
         {
-            bool isMoving =
-                Input.GetKey(KeyCode.W) ||
-                Input.GetKey(KeyCode.A) ||
-                Input.GetKey(KeyCode.S) ||
-                Input.GetKey(KeyCode.D);
+            float moveDistance =
+                Vector3.Distance(transform.position, lastPosition);
 
-            // タッチ移動判定
-            if (charactorMove != null)
-            {
-                isMoving = isMoving || charactorMove.touchDirection != Vector2.zero;
-            }
+            bool isMoving = moveDistance > 0.001f;
 
             if (isMoving)
             {
@@ -85,5 +81,8 @@ public class AnimationPlayer : MonoBehaviour
                 }
             }
         }
+
+        // 現在位置を保存
+        lastPosition = transform.position;
     }
 }

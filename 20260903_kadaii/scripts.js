@@ -102,3 +102,9 @@ touchArea.addEventListener("touchend", function(e) {
     );
 
 });
+
+unityInstance.SendMessage(
+    "Player",
+    "SetTouchDirection",
+    "1,0"
+);
