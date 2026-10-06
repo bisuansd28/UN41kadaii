@@ -41,7 +41,7 @@ public class CharactorMove : MonoBehaviour
             touchDirection.x,
             0,
             touchDirection.y
-        );
+        ).normalized;
 
         transform.position += touchMove * moveSpeed * Time.deltaTime;
 

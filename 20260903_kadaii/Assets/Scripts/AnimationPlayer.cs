@@ -18,6 +18,8 @@ public class AnimationPlayer : MonoBehaviour
    // アニメーションコンポーネントを格納する変数
    private Animation animationComponent;
 
+   public Vector2 touchDirection = Vector2.zero;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -55,7 +57,7 @@ public class AnimationPlayer : MonoBehaviour
         if (!isJumping)
         {
             // WASDで走る
-            if(Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D))
+            if(Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D) || touchDirection != Vector2.zero)
             {
                 animationComponent.Play("Run");
             } else
