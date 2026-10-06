@@ -9,10 +9,10 @@ public class CoinSpawner : MonoBehaviour
     public int coinCount = 3;
 
     // 生成範囲
-    public float minX = -4f;
-    public float maxX = 4f;
-    public float minZ = -4f;
-    public float maxZ = 4f;
+    public float minX = -3f;
+    public float maxX = 3f;
+    public float minZ = -3f;
+    public float maxZ = 3f;
 
     void Start()
     {

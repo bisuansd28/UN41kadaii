@@ -43,6 +43,8 @@ public class CharactorMove : MonoBehaviour
             touchDirection.y
         );
 
+        transform.position += touchMove * moveSpeed * Time.deltaTime;
+
         // XとZが-4～4を超えないようにする
         Vector3 pos = transform.position;
 
